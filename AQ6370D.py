@@ -52,7 +52,7 @@ class AQ6370D(Trace):
             gpib_address: Defaults to 'GPIB0::8::INSTR'.
         """
         # super(AQ6370D, self).__init__()
-        rm = pyvisa.ResourceManager("@py")
+        rm = pyvisa.ResourceManager()
         # rm = pyvisa.ResourceManager()
         # print(rm.list_resources())
         self.osa = rm.open_resource(gpib_address)  # osa livre
@@ -64,6 +64,8 @@ class AQ6370D(Trace):
             self.set_center(center)
         if span != None:
             self.set_span(span)
+        
+        print(self.osa.query("*idn?"))
 
         self.y_unit_dic = {0: "dBm", 1: "nW", 2: "dBm/nm", 3: "nW/nm"}
         self.get_y_unit()
