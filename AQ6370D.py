@@ -6,11 +6,11 @@
 @Author  :   Roney D. Silva
 @Contact :   roneyddasilva@gmail.com
 """
-from inspect import Traceback
-from pathlib import Path
+# from inspect import Traceback
+# from pathlib import Path
+# import matplotlib.pyplot as plt
 import pyvisa
 from numpy import asfarray, column_stack
-import matplotlib.pyplot as plt
 from time import sleep  # função para verificar o status byte do aparelho
 
 
@@ -49,7 +49,7 @@ class AQ6370D(Trace):
         """
         __init__ constructor of AQ6370D Advantest
         Args:
-            gpib_address: Defaults to 'GPIB0::8::INSTR'.
+            gpib_address: Defaults to 'GPIB0::1::INSTR'.
         """
         # super(AQ6370D, self).__init__()
         rm = pyvisa.ResourceManager()
@@ -57,7 +57,7 @@ class AQ6370D(Trace):
         # print(rm.list_resources())
         self.osa = rm.open_resource(gpib_address)  # osa livre
         # self.osa.chunk_size = 65535  # comunitaiton setup
-        self.osa.timeout = 200_000  # comunitaiton setup
+        self.osa.timeout = 10_000  # comunitaiton setup
         # self.osa.read_termination = "\r\n"  # comunitaiton setup
         self.check_error()
         if center != None:
@@ -84,7 +84,7 @@ class AQ6370D(Trace):
         """
         self.osa.write(":SENSE:BANDWIDTH:RESOLUTION " + resolution)
         self.resolution = self.osa.query(":sense:bandwidth?")
-        print("current resolution ", self.resolution)
+        print("actual resolution ", self.resolution)
 
     def set_sensitivity(self,sensitivity:str):
         """set_sensitivity
@@ -109,7 +109,7 @@ class AQ6370D(Trace):
 
         self.osa.write(":INITIATE")  # make a sigle measurement
         # self.checkSTB(1)
-        self.read(trace=trace)
+        # self.read(trace=trace)
 
     def read(self, trace="tra"):
         """
