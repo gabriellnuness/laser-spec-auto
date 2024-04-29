@@ -16,8 +16,6 @@ laser = ilx(gpib_address="GPIB0::12::INSTR")
 laser.temperature_on()
 laser.current_on()
 
-
-osa.read() # bug, it must be called first otherwise the variables are not created
 plt.figure()
 # setting current and temperature in laser controller
 for current in range(0, 500+50, 50):
@@ -26,10 +24,10 @@ for current in range(0, 500+50, 50):
     sleep(1)
 
     # reading data
-    wavelength_m = osa.wavelength_m
-    power_dbm = osa.optical_power_dbm
     osa.simple_sweep()
     osa.read()
+    wavelength_m = osa.wavelength_m
+    power_dbm = osa.optical_power_dbm
 
     # saving data
     filename = f"M5_{current}mA".replace(".", "_")
