@@ -83,8 +83,14 @@ class AQ6370D(Trace):
             resolution. Defaults to '20pm'.
         """
         self.osa.write(":SENSE:BANDWIDTH:RESOLUTION " + resolution)
-        self.resolution = self.osa.query(":sense:bandwidth?")
-        print("actual resolution ", self.resolution)
+        self.resolution = float(self.osa.query(":sense:bandwidth?"))
+        print(f"actual resolution =  {self.resolution*1e9} nm")
+
+    def set_sweep_points(self, points=":AUTO 1"):
+        self.osa.write(f":sense:sweep:points:auto 0") # turn off auto to recalculate if going to be on again
+        self.osa.write(f":sense:sweep:points {points}")
+        self.sweep_points = int(self.osa.query(":sense:sweep:points?"))
+        print(f"sampling points = {self.sweep_points}")
 
     def set_sensitivity(self,sensitivity:str):
         """set_sensitivity
